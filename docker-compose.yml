@@ -1,0 +1,20 @@
+version: '3'
+
+services:
+  game:
+    build: game
+    restart: unless-stopped
+    depends_on:
+      - api
+    ports:
+      - "0.0.0.0:3387:80"
+  api:
+    build: api
+    restart: unless-stopped
+    environment:
+      - DEBUG=1
+      - SINGLE_PLAYER=false
+      - SIO_HOST=0.0.0.0
+      - SIO_PORT=4433
+    ports:
+      - "0.0.0.0:3388:4433"
