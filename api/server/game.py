@@ -367,8 +367,8 @@ class Game:
                 self.difficulty["expired_command_health_decrease"] + 0.25
             )
 
-            self.difficulty["asteroid_chance"] = 0.15
-            self.difficulty["black_hole_chance"] = 0.15
+            self.difficulty["asteroid_chance"] = 0
+            self.difficulty["black_hole_chance"] = 0
 
             # if self.level > 5:
             #     self.difficulty["useless_command_health_decrease"] = min(
