@@ -6,7 +6,7 @@
       </div>
       <div class="actions separated-container">
         <div id="subtitle" class="space-font-mono">
-          Collaborative simulator of space disasters
+          Collaborative simulator of city management
         </div>
         <push-button @click="$router.push('/host')" class="space-font-mono" big :disabled="!connected">Host</push-button>
         <push-button @click="joinLobby()" class="space-font-mono" big :disabled="!connected">Join</push-button>

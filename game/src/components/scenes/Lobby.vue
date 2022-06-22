@@ -36,7 +36,7 @@
           <push-button fitted  inline @click="changeLobbySize(-1)" :disabled="this.settings.size <= 2" style="float: left;" :class="settingsColourClass">
             <span><icon name="chevron-left"></icon></span>
           </push-button>
-          <span :class="settingsColourClass">Numero giocatori: {{ settings.size }}</span>
+          <span :class="settingsColourClass">City Departments: {{ settings.size }}</span>
           <push-button fitted inline @click="changeLobbySize(+1)" :disabled="this.settings.size >= 4" style="float: right" :class="settingsColourClass">
             <span><icon name="chevron-right"></icon></span>
           </push-button>
