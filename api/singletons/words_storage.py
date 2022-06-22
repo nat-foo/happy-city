@@ -5,9 +5,7 @@ from utils.singleton import singleton
 class WordsStorage:
     def __init__(self):
         self.PREFIXES = [
-            "ultra", "super", "mega", "proto", "sub", "pro", "alter", "strata", "de", "iono", "arc-", "bio",
-            "mono", "bi", "tri", "dia", "penta", "hexa", "octa", "deca", "multi",
-            "pseudo", "thermo", "turbo", "infra", "astro", "macro", "spectra", "tele"
+            ""
         ]
 
         self.ROLE_0 = {
