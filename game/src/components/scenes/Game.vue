@@ -4,7 +4,7 @@
       <death-barrier :position='deathBarrierPosition'></death-barrier>
       <ship v-if="showShip" :left="shipLeft" :transitionSpeed="outroAnimation ? 4 : levelTransition ? 0 : 1"></ship>
       <transition name="v-fade">
-        <span class="outline" v-if="printingWelcome || levelTransition">Sector {{ levelInfo.level }}</span>
+        <span class="outline" v-if="printingWelcome || levelTransition">Quarter {{ levelInfo.level }}</span>
       </transition>
 
       <transition name="v-fade">
