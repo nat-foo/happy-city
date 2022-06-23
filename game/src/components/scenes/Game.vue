@@ -48,7 +48,9 @@
       </div>
     </div>
     <div class="bottom centered" v-else-if="gameOver">
-      <div><icon class="icon" name="bomb" scale="3"></icon></div>
+      <div v-for="i in levelInfo.level" :key="i">
+        <icon class="icon" name="smile-o" scale="3"></icon>
+      </div>
       <div class="space-font-mono"><span>{{ gameOverText }}</span></div>
       <div class="back-button">
         <push-button class="green space-font-mono" narrow @click="restartGame()">
@@ -95,7 +97,7 @@
           modifierText: ''
         },
 
-        gameOverText: "Congratulations"
+        gameOverText: ""
       }
     },
     components: {
@@ -167,7 +169,7 @@
       this.$bus.$on('#player_disconnected', this.haltGameDisconnect)
       this.$bus.$on('#game_over', (data) => {
         this.status = GAME_OVER
-        this.gameOverText = `Congratulations! You got to level ${data.level+1}.`
+        this.gameOverText = `Good job! The public loves you. We’re a happy city.`
         this.stopSound('sounds/alarm.mp3')
         this.playSound('sounds/gameover.mp3')
       })
