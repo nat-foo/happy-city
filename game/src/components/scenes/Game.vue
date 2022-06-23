@@ -49,7 +49,7 @@
     </div>
     <div class="bottom centered" v-else-if="gameOver">
       <div><icon class="icon" name="bomb" scale="3"></icon></div>
-      <div class="space-font-mono"><span>Game over</span></div>
+      <div class="space-font-mono"><span>{{ gameOverText }}</span></div>
       <div class="back-button">
         <push-button class="green space-font-mono" narrow @click="restartGame()">
           <span><icon name="reply"></icon></span>
@@ -93,7 +93,9 @@
           level: 1,
           modifier: null,
           modifierText: ''
-        }
+        },
+
+        gameOverText: "Congratulations"
       }
     },
     components: {
@@ -163,8 +165,9 @@
 
       this.$bus.$on('#disconnect', this.haltGameDisconnect)
       this.$bus.$on('#player_disconnected', this.haltGameDisconnect)
-      this.$bus.$on('#game_over', () => {
+      this.$bus.$on('#game_over', (data) => {
         this.status = GAME_OVER
+        this.gameOverText = `Congratulations! You got to level ${data.level}.`
         this.stopSound('sounds/alarm.mp3')
         this.playSound('sounds/gameover.mp3')
       })
