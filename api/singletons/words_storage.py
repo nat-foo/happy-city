@@ -4,8 +4,16 @@ from utils.singleton import singleton
 @singleton
 class WordsStorage:
     def __init__(self):
+        self.USE_PREFIXES = False
+
         self.PREFIXES = [
-            ""
+            "MACRO" "MICRO",                                            # Size
+            "MONO", "UNI", "BI", "TRI", "QUAD", "MULTI", "POLY"         # Quantity
+            "ANTI", "CONTRA", "COM", "SYM",                             # Relationships
+            "ANTE", "FORE", "PRE", "POST",                              # Position in time
+            "CIRCUM", "EXO", "INTER", "INTRA", "PERI", "SUB", "TRANS",  # Position in space
+            "EU", "MAL",                                                # Quality
+            "DE", "DIS", "IN", "MIS", "NON", "UN"                       # Negation
         ]
 
         self.ROLE_0 = {

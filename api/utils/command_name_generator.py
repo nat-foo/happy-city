@@ -40,6 +40,14 @@ class CommandNameGenerator:
         print (f"ADJECTIVE: Picked '{adjective}' for role {role}.")
         return adjective
 
+    def generate_noun(self, role):
+        while True:
+            noun = self.random_noun(role)
+            if noun not in self.used_nouns:
+                break
+        self.used_nouns.append(noun)
+        return noun
+
     def generate_compound_noun(self, role):
         prefix = random.choice(self.words_storage.PREFIXES).lower()
 
@@ -68,10 +76,16 @@ class CommandNameGenerator:
         return "{} {}".format(adjective, noun)
 
     def generate_command_name(self, role=0):
-        if random.randint(0, 2) == 0:
-            return self.generate_adjective_noun(role)
+        generation_options = []
+        
+        if self.words_storage.USE_PREFIXES == True:
+            generation_options.append(self.generate_noun)
         else:
-            return self.generate_compound_noun(role)
+            generation_options.append(self.generate_compound_noun)
+
+        generation_options.append(self.generate_adjective_noun)
+
+        return random.choice(generation_options)(role)
 
     def generate_action(self):
         while True:
