@@ -48,8 +48,8 @@
       </div>
     </div>
     <div class="bottom centered" v-else-if="gameOver">
-      <div v-for="i in levelInfo.level" :key="i">
-        <icon class="icon" name="smile-o" scale="3"></icon>
+      <div>
+        <icon class="icon" v-for="i in levelInfo.level" :key="i" name="smile-o" scale="3"></icon>
       </div>
       <div class="space-font-mono"><span>{{ gameOverText }}</span></div>
       <div class="back-button">
@@ -307,8 +307,8 @@
   }
 
   .bottom.centered>div>.icon {
-    margin: 0 auto;
-    display: block;
+    margin: 0 1%;
+    display: inline-block;
   }
 
   .bottom.centered>div {

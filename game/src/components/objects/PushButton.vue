@@ -131,7 +131,7 @@
 
   .btn-push.narrow {
     padding: 8px 24px 8px 24px;
-    margin: 0 auto;
+    margin: 10px 0;
     text-align: center;
   }
 
@@ -151,7 +151,7 @@
     font-size: 16px;
     text-decoration: none;
     background: #f7f7f7;
-    /*margin: 0 10px;*/
+    margin: 0px 14px;
     padding: 5px 50px;
     border: 1px solid #c4c4c4;
     -webkit-border-radius: 5px;
