@@ -344,6 +344,10 @@ class Game:
 
         # Go to next level
         self.level += 1
+        if (self.level == 0):
+            print("INFO: Starting the game")
+        else:
+            print(f"INFO: Advancing to level {self.level}.")
 
         # Reset health and death limit
         self.health = self.STARTING_HEALTH
@@ -352,7 +356,7 @@ class Game:
         # Change difficulty settings if this is not the first level
         if self.level > 0:
             # Remove any eventual game modifier difficulty changes
-            logging.debug("VANILLA DIFF: {}".format(self.vanilla_difficulty))
+            #logging.debug("VANILLA DIFF: {}".format(self.vanilla_difficulty))
             self.difficulty = self.vanilla_difficulty
 
             self.difficulty["instructions_time"] = max(7.0, self.difficulty["instructions_time"] - 1.25)
@@ -367,8 +371,8 @@ class Game:
                 self.difficulty["expired_command_health_decrease"] + 0.25
             )
 
-            self.difficulty["asteroid_chance"] = 0.15
-            self.difficulty["black_hole_chance"] = 0.15
+            self.difficulty["asteroid_chance"] = 0
+            self.difficulty["black_hole_chance"] = 0
 
             # if self.level > 5:
             #     self.difficulty["useless_command_health_decrease"] = min(
@@ -532,8 +536,8 @@ class Game:
             while not valid_command:
                 valid_command = True
                 command = random.choice(target.grid.objects)
-                print(self.instructions + [slot.instruction])
-                print(slot.instruction)
+                #print(self.instructions + [slot.instruction])
+                #print(slot.instruction)
                 for x in self.instructions + [slot.instruction]:
                     # x is `None` if slot.instructions is None (first generation)
                     if x is not None and x.target_command == command:
@@ -591,6 +595,7 @@ class Game:
 
             if self.health <= self.death_limit:
                 # Game over
+                print("INFO: Game over")
                 await self.game_over()
                 break
             else:
@@ -598,7 +603,11 @@ class Game:
                 await self.notify_health()
 
     async def game_over(self):
-        await Sio().emit("game_over", room=self.sio_room)
+        self.level = -1
+        #await Sio().emit("game_over", room=self.sio_room)
+        await Sio().emit("game_over", {
+            "level": self.level
+        }, room=self.sio_room)
         logging.info("{} game over".format(self.uuid))
 
     async def notify_health(self):

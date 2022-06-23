@@ -8,75 +8,130 @@ class CommandNameGenerator:
         if words_storage is None:
             words_storage = WordsStorage()
         self.words_storage = words_storage
-        self.used_nouns = []
-        self.used_adjectives = []
+        self.used_names = []
         self.used_verbs = []
+        self.retry_limit = 100 # How many times will it look for a new word in the list before giving up?
 
     def random_noun(self, role=0):
-        print(f"NOUN: ROLE IS {role}")
         if role == 0:
-            nouns = random.choice([self.words_storage.ROLE_0["nouns"] * 4, self.words_storage.ROLE_0["rare_nouns"]])
+            nouns = random.choice([self.words_storage.ROLE_0["nouns"]])
         elif role == 1:
-            nouns = random.choice([self.words_storage.ROLE_1["nouns"] * 4, self.words_storage.ROLE_1["rare_nouns"]])
+            nouns = random.choice([self.words_storage.ROLE_1["nouns"]])
         elif role == 2:
-            nouns = random.choice([self.words_storage.ROLE_2["nouns"] * 4, self.words_storage.ROLE_2["rare_nouns"]])
+            nouns = random.choice([self.words_storage.ROLE_2["nouns"]])
         elif role == 3:
-            nouns = random.choice([self.words_storage.ROLE_3["nouns"] * 4, self.words_storage.ROLE_3["rare_nouns"]])
+            nouns = random.choice([self.words_storage.ROLE_3["nouns"]])
         noun = random.choice(nouns).lower()
-        print (f"NOUN: Picked '{noun}' for role {role}.")
         return noun
 
     def random_adjective(self, role=0):
-        print(f"ADJ: ROLE IS {role}")
         if role == 0:
-            adjectives = random.choice([self.words_storage.ROLE_0["adjectives"] * 4, self.words_storage.ROLE_0["rare_adjectives"]])
+            adjectives = random.choice([self.words_storage.ROLE_0["adjectives"]])
         elif role == 1:
-            adjectives = random.choice([self.words_storage.ROLE_1["adjectives"] * 4, self.words_storage.ROLE_1["rare_adjectives"]])
+            adjectives = random.choice([self.words_storage.ROLE_1["adjectives"]])
         elif role == 2:
-            adjectives = random.choice([self.words_storage.ROLE_2["adjectives"] * 4, self.words_storage.ROLE_2["rare_adjectives"]])
+            adjectives = random.choice([self.words_storage.ROLE_2["adjectives"]])
         elif role == 3:
-            adjectives = random.choice([self.words_storage.ROLE_3["adjectives"] * 4, self.words_storage.ROLE_3["rare_adjectives"]])
+            adjectives = random.choice([self.words_storage.ROLE_3["adjectives"]])
         adjective = random.choice(adjectives).lower()
-        print (f"ADJECTIVE: Picked '{adjective}' for role {role}.")
         return adjective
+
+    def generate_noun(self, role):
+        i = 0
+        while True:
+            noun = self.random_noun(role)
+            if (noun not in self.used_names):
+                break
+            if (i >= self.retry_limit):
+                noun = None
+                break
+            i += 1
+
+        if noun is None: return None
+        return noun
 
     def generate_compound_noun(self, role):
         prefix = random.choice(self.words_storage.PREFIXES).lower()
 
+        i = 0
         while True:
             noun = self.random_noun(role)
-            if noun not in self.used_nouns:
+            if (noun not in self.used_names):
                 break
-        self.used_nouns.append(noun)
+            if (i >= self.retry_limit):
+                noun = None
+                break
+            i += 1
+
+        if noun is None: return None
 
         if prefix.endswith(noun[0]):
             prefix += "-"
         elif " " in noun:
             prefix += " "
-        return "{}{}".format(prefix, noun)
+        prefixNoun = f"{prefix}{noun}"
+        return prefixNoun
 
     def generate_adjective_noun(self, role):
+        i = 0
         while True:
-            # role = random.getrandbits(1)
             noun = self.random_noun(role)
-            adjective = self.random_adjective(role)
-            if noun not in self.used_nouns and adjective not in self.used_adjectives:
+            if (noun not in self.used_names):
                 break
-        self.used_nouns.append(noun)
-        self.used_adjectives.append(adjective)
+            if (i >= self.retry_limit):
+                noun = None
+                break
+            i += 1
 
-        return "{} {}".format(adjective, noun)
+        i = 0
+        while True:
+            adjective = self.random_adjective(role)
+            if (adjective not in self.used_names):
+                break
+            if (i >= self.retry_limit):
+                adjective = None
+                break
+            i += 1
+
+        if noun is None or adjective is None:
+            return None
+
+        adjectiveNoun = f"{adjective} {noun}"
+        return adjectiveNoun
 
     def generate_command_name(self, role=0):
-        if random.randint(0, 2) == 0:
-            return self.generate_adjective_noun(role)
+        generation_options = []
+
+        if self.words_storage.USE_PREFIXES == True:
+            option_1a = self.generate_compound_noun(role)
+            if option_1a is not None:
+                generation_options.append(option_1a)
         else:
-            return self.generate_compound_noun(role)
+            option_1b = self.generate_noun(role)
+            if option_1b is not None:
+                generation_options.append(option_1b)
+
+        option_2 = self.generate_adjective_noun(role)
+        if option_2 is not None:
+            generation_options.append(option_2)
+
+        if len(generation_options) == 0:
+            print("ERROR: No options left")
+            return None
+
+        cname = random.choice(generation_options)
+        self.used_names.append(cname)
+        return cname
 
     def generate_action(self):
+        i = 0
         while True:
             verb = random.choice(self.words_storage.VERBS)
             if verb not in self.used_verbs:
                 break
-        self.used_verbs.append(verb)
+            if (i >= self.retry_limit):
+                verb = None
+                break
+            i += 1
+        if verb is not None: self.used_verbs.append(verb)
         return verb

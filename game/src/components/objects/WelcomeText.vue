@@ -23,21 +23,20 @@
       return {
         welcomeText: [
 `
-CRITICAL SITUATION!
+THE CITY NEEDS YOU!
 
-READ THE FOLLOWING PROTOCOL:
+Each player is a different city department.
 
-Each player has different controls.
+Each department is assigned instructions to keep the city running.
 
-Each player is assigned an instruction.
+Communicate instructions aloud - communication is key!
 
-Communicate instructions aloud.
+The department with the tool that relates to the instruction 
+must take action.
 
-Whoever owns the command relating to an instruction must execute it.
+Take action within the time limit - the city depends on us!
 
-Execute the instructions within the time limit.
-
-Collaboration is essential! Work like a real team!
+Collaboration is essential for keeping the city running.
 
 Good luck!
 `

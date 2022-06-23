@@ -4,7 +4,7 @@
       <death-barrier :position='deathBarrierPosition'></death-barrier>
       <ship v-if="showShip" :left="shipLeft" :transitionSpeed="outroAnimation ? 4 : levelTransition ? 0 : 1"></ship>
       <transition name="v-fade">
-        <span class="outline" v-if="printingWelcome || levelTransition">Sector {{ levelInfo.level }}</span>
+        <span class="outline" v-if="printingWelcome || levelTransition">Quarter {{ levelInfo.level }}</span>
       </transition>
 
       <transition name="v-fade">
@@ -49,11 +49,11 @@
     </div>
     <div class="bottom centered" v-else-if="gameOver">
       <div><icon class="icon" name="bomb" scale="3"></icon></div>
-      <div class="space-font-mono"><span>Game over</span></div>
+      <div class="space-font-mono"><span>{{ gameOverText }}</span></div>
       <div class="back-button">
         <push-button class="green space-font-mono" narrow @click="restartGame()">
           <span><icon name="reply"></icon></span>
-          Try again
+          Retry
         </push-button>
         <push-button class="orange space-font-mono" narrow @click="goToMenu()">
           <span><icon name="frown-o"></icon></span>
@@ -93,7 +93,9 @@
           level: 1,
           modifier: null,
           modifierText: ''
-        }
+        },
+
+        gameOverText: "Congratulations"
       }
     },
     components: {
@@ -163,8 +165,9 @@
 
       this.$bus.$on('#disconnect', this.haltGameDisconnect)
       this.$bus.$on('#player_disconnected', this.haltGameDisconnect)
-      this.$bus.$on('#game_over', () => {
+      this.$bus.$on('#game_over', (data) => {
         this.status = GAME_OVER
+        this.gameOverText = `Congratulations! You got to level ${data.level}.`
         this.stopSound('sounds/alarm.mp3')
         this.playSound('sounds/gameover.mp3')
       })

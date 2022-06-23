@@ -114,12 +114,15 @@ class Grid:
         self.role = role
 
         while True:
-            print(self.grid)
+            #print(self.grid)
             y, x = self.get_next_empty()
             if y < 0 and x < 0:
                 break
-            print("next empties are: %s, %s" % (y, x))
-            self.add_random_element(y, x)
+            #print("next empties are: %s, %s" % (y, x))
+            success = self.add_random_element(y, x)
+            if success == False:
+                print("ERROR: No more words to use. Breaking out of tile creation.")
+                break # It means there are no more words to use.
 
     def get_next_empty(self):
         for y in range(4):
@@ -131,7 +134,7 @@ class Grid:
     def add_random_element(self, y, x):
         fsr = self.free_space_right(y, x)
 
-        print("for %s, %s; there's %s spaces to the right." % (y, x, fsr))
+        #print("for %s, %s; there's %s spaces to the right." % (y, x, fsr))
 
         if fsr == 1:
             # No space left on x axis, only Squares and VerticalRectangles allowed
@@ -156,7 +159,7 @@ class Grid:
 
         # pick something from the pool, or if nothing's left pick a square
         _type = random.choice(pool) if len(pool) != 0 else layout_cells.SQUARE
-        print("we picked to insert a type %s object there" % _type)
+        #print("we picked to insert a type %s object there" % _type)
 
         # if fsr is > 2 and you picked a horizontalrectangle, decide how long it will be.
         if _type == layout_cells.HORIZONTAL_RECTANGLE:
@@ -180,13 +183,14 @@ class Grid:
             #     length = 2
             length = 2
 
-        print("and the length will be %s" % length)
+        #print("and the length will be %s" % length)
 
         # insert the object
-        self.insert_object(y, x, _type, length)
+        success = self.insert_object(y, x, _type, length)
+        return success
 
     def insert_object(self, y, x, _type, length):
-        print("inserting a _type %s object of length %s to %s, %s" % (_type, length, y, x))
+        #print("inserting a _type %s object of length %s to %s, %s" % (_type, length, y, x))
 
         # Only the
         self.grid[y][x] = _type
@@ -261,7 +265,17 @@ class Grid:
                 self.command_name_generator.generate_action() for _ in range(random.randint(2, 4))
             ]
 
+        if init_kwargs["name"] == None:
+            # The words list has run out of unique names to use,
+            # so we should tell the grid to stop placing tiles.
+            print("ERROR: Name was None, breaking tile generation.")
+            return False
+        cname = init_kwargs["name"]
+        print(f"INFO: Setting command name {cname}")
+        # Otherwise proceed as normal
         self.objects.append(_object(**init_kwargs))
+        return True
+
 
     def free_space_right(self, y, x):
         cnt = 0
