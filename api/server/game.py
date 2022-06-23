@@ -603,12 +603,20 @@ class Game:
                 await self.notify_health()
 
     async def game_over(self):
-        self.level = -1
-        #await Sio().emit("game_over", room=self.sio_room)
         await Sio().emit("game_over", {
             "level": self.level
         }, room=self.sio_room)
         logging.info("{} game over".format(self.uuid))
+
+        # Reset stats
+        self.level = -1
+        self.health = self.STARTING_HEALTH
+        self.death_limit = 0
+        self.health_drain_task = None
+        self.previous_game_modifier = None
+        self.game_modifier = None
+        self.game_modifier_task = None
+        self.difficulty = self.vanilla_difficulty
 
     async def notify_health(self):
         await Sio().emit("health_info", {

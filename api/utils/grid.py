@@ -271,7 +271,7 @@ class Grid:
             print("ERROR: Name was None, breaking tile generation.")
             return False
         cname = init_kwargs["name"]
-        print(f"INFO: Setting command name {cname}")
+        
         # Otherwise proceed as normal
         self.objects.append(_object(**init_kwargs))
         return True

@@ -33,7 +33,7 @@ class Instruction:
         if type(self.target_command) is Button:
             sentences = [
                 "Operate {name}",
-                "Insert {name}",
+                "Engage {name}",
                 "Press {name}"
             ]
         elif issubclass(type(self.target_command), SliderLikeElement):
@@ -43,9 +43,9 @@ class Instruction:
                 "Place {name} on {value}"
             ]
             if self.value > self.target_command.value:
-                sentences.append("Increase {name} a {value}")
+                sentences.append("Increase {name} to {value}")
             else:
-                sentences += ["Decrease {name} a {value}", "Reduce {name} a {value}"]
+                sentences += ["Decrease {name} to {value}", "Reduce {name} to {value}"]
 
             if self.value == self.target_command.max:
                 sentences += ["Increase {name} to maximum", "Set {name} to maximum"]
