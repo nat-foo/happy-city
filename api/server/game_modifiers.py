@@ -70,7 +70,7 @@ class AsteroidsField(GameModifier):
     DESCRIPTION = "Incoming asteroid field!"
 
     def difficulty_post_processor(self, diff):
-        print(diff)
+        #print(diff)
         diff["asteroid_chance"] *= 3
         diff["black_hole_chance"] /= 2
         diff["special_command_cooldown"] //= 2
@@ -81,7 +81,7 @@ class BlackHolesField(GameModifier):
     DESCRIPTION = "Incoming black holes!"
 
     def difficulty_post_processor(self, diff):
-        print(diff)
+        #print(diff)
         diff["black_hole_chance"] *= 3
         diff["asteroid_chance"] /= 2
         diff["special_command_cooldown"] //= 2

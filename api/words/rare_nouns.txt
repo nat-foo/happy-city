@@ -1,2 +1,0 @@
-mayor,0
-vote,1
