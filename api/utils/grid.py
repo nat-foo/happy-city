@@ -119,7 +119,9 @@ class Grid:
             if y < 0 and x < 0:
                 break
             print("next empties are: %s, %s" % (y, x))
-            self.add_random_element(y, x)
+            success = self.add_random_element(y, x)
+            if success == False:
+                break # It means there are no more words to use.
 
     def get_next_empty(self):
         for y in range(4):
@@ -183,7 +185,8 @@ class Grid:
         print("and the length will be %s" % length)
 
         # insert the object
-        self.insert_object(y, x, _type, length)
+        success = self.insert_object(y, x, _type, length)
+        return success
 
     def insert_object(self, y, x, _type, length):
         print("inserting a _type %s object of length %s to %s, %s" % (_type, length, y, x))
@@ -261,7 +264,15 @@ class Grid:
                 self.command_name_generator.generate_action() for _ in range(random.randint(2, 4))
             ]
 
+        if init_kwargs["name"] == None:
+            # The words list has run out of unique names to use,
+            # so we should tell the grid to stop placing tiles.
+            return False
+
+        # Otherwise proceed as normal
         self.objects.append(_object(**init_kwargs))
+        return True
+
 
     def free_space_right(self, y, x):
         cnt = 0

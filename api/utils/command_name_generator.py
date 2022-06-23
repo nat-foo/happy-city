@@ -41,56 +41,98 @@ class CommandNameGenerator:
         return adjective
 
     def generate_noun(self, role):
+        i = 0
         while True:
             noun = self.random_noun(role)
-            if noun not in self.used_nouns:
+            if (noun not in self.used_nouns):
                 break
-        self.used_nouns.append(noun)
+            if (i >= len(self.used_nouns)):
+                noun = None
+                break
+            i += 1
+        if noun is not None: self.used_nouns.append(noun)
         return noun
 
     def generate_compound_noun(self, role):
         prefix = random.choice(self.words_storage.PREFIXES).lower()
 
+        i = 0
         while True:
             noun = self.random_noun(role)
-            if noun not in self.used_nouns:
+            if (noun not in self.used_nouns):
                 break
-        self.used_nouns.append(noun)
+            if (i >= len(self.used_nouns)):
+                noun = None
+                break
+            i += 1
+
+        if noun is not None: self.used_nouns.append(noun)
 
         if prefix.endswith(noun[0]):
             prefix += "-"
         elif " " in noun:
             prefix += " "
-        return "{}{}".format(prefix, noun)
+        prefixNoun = f"{prefix}{noun}"
+        return prefixNoun
 
     def generate_adjective_noun(self, role):
+        i = 0
         while True:
-            # role = random.getrandbits(1)
             noun = self.random_noun(role)
-            adjective = self.random_adjective(role)
-            if noun not in self.used_nouns and adjective not in self.used_adjectives:
+            if (noun not in self.used_nouns):
                 break
-        self.used_nouns.append(noun)
-        self.used_adjectives.append(adjective)
+            if (i >= len(self.used_nouns)):
+                noun = None
+                break
+            i += 1
+
+        if noun is not None: self.used_nouns.append(noun)
+
+        i = 0
+        while True:
+            adjective = self.random_adjective(role)
+            if (adjective not in self.used_adjectives):
+                break
+            if (i >= len(self.used_adjectives)):
+                adjective = None
+                break
+            i += 1
+        
+        if adjective is not None: self.used_adjectives.append(adjective)
 
         return "{} {}".format(adjective, noun)
 
     def generate_command_name(self, role=0):
         generation_options = []
-        
+        cname
+
         if self.words_storage.USE_PREFIXES == True:
-            generation_options.append(self.generate_noun)
+            cname = self.generate_compound_noun(role)
+            if cname is not None:
+                generation_options.append(cname)
         else:
-            generation_options.append(self.generate_compound_noun)
+            cname = self.generate_noun(role)
+            if cname is not None:
+                generation_options.append(cname)
 
-        generation_options.append(self.generate_adjective_noun)
+        cname = self.generate_adjective_noun(role)
+        if cname is not None:
+            generation_options.append(cname)
 
-        return random.choice(generation_options)(role)
+        if len(generation_options) == 0:
+            return None
+
+        return random.choice(generation_options)
 
     def generate_action(self):
+        i = 0
         while True:
             verb = random.choice(self.words_storage.VERBS)
             if verb not in self.used_verbs:
                 break
-        self.used_verbs.append(verb)
+            if (i >= len(self.used_verbs)):
+                verb = None
+                break
+            i += 1
+        if verb is not None: self.used_verbs.append(verb)
         return verb
