@@ -598,6 +598,7 @@ class Game:
                 await self.notify_health()
 
     async def game_over(self):
+        self.level = -1
         await Sio().emit("game_over", room=self.sio_room)
         logging.info("{} game over".format(self.uuid))
 
