@@ -167,7 +167,7 @@
       this.$bus.$on('#player_disconnected', this.haltGameDisconnect)
       this.$bus.$on('#game_over', (data) => {
         this.status = GAME_OVER
-        this.gameOverText = `Congratulations! You got to level ${data.level}.`
+        this.gameOverText = `Congratulations! You got to level ${data.level+1}.`
         this.stopSound('sounds/alarm.mp3')
         this.playSound('sounds/gameover.mp3')
       })
@@ -192,7 +192,14 @@
       goToMenu () {
         window.location.replace('/')
       },
-      restartGame () {
+      restartGame ()
+      {
+        // Reset health and death barrier
+        this.healthInfo.health = 50
+        this.healthInfo.deathLimit = 0
+        this.showAlarm = false
+
+        // Emit start game
         this.$io.emit("start_game")
       },
       haltGameDisconnect () {
